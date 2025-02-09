@@ -41,6 +41,8 @@ def cuda_platform_plugin() -> Optional[str]:
                 is_cuda = True
         finally:
             pynvml.nvmlShutdown()
+    except RuntimeError as e:  # Catching is_cuda=True but bypassed because of the pynvml version error (silented)
+        raise
     except Exception as e:
         if "nvml" not in e.__class__.__name__.lower():
             # If the error is not related to NVML, re-raise it.
